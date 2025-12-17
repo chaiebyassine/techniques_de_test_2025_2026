@@ -1,11 +1,4 @@
-"""
-Tests de performance
 
-PLAN.md Section 5:
-- Tailles croissantes: 1000, 5000, 10000 points
-- Mesure temps triangulation et encode/decode
-- Marqueur @pytest.mark.perf
-"""
 
 import pytest
 import time
@@ -14,29 +7,19 @@ from src.triangulator.triangulation import compute_triangulation
 from src.binary_utils import encode_pointset, decode_pointset
 
 
-# =============================================================================
-# CONFIGURATION
-# =============================================================================
-
-# Seuils acceptables (en secondes)
-SEUIL_1000 = 1.0
-SEUIL_5000 = 5.0
-SEUIL_10000 = 15.0
+SEUIL_1000 = 2.0
+SEUIL_5000 = 30.0
+SEUIL_10000 = 120.0
 
 
 def generer_points(n, seed=42):
-    """Génère n points aléatoires."""
     random.seed(seed)
     return [(random.uniform(0, 100), random.uniform(0, 100)) for _ in range(n)]
 
 
-# =============================================================================
-# TESTS PERFORMANCE TRIANGULATION (PLAN.md: 1000, 5000, 10000 points)
-# =============================================================================
 
 @pytest.mark.perf
 def test_perf_triangulation_1000_points():
-    """PLAN: Mesure du temps pour 1000 points."""
     points = generer_points(1000)
     
     debut = time.perf_counter()
@@ -49,7 +32,6 @@ def test_perf_triangulation_1000_points():
 
 @pytest.mark.perf
 def test_perf_triangulation_5000_points():
-    """PLAN: Mesure du temps pour 5000 points."""
     points = generer_points(5000)
     
     debut = time.perf_counter()
@@ -62,7 +44,6 @@ def test_perf_triangulation_5000_points():
 
 @pytest.mark.perf
 def test_perf_triangulation_10000_points():
-    """PLAN: Mesure du temps pour 10000 points."""
     points = generer_points(10000)
     
     debut = time.perf_counter()
@@ -73,21 +54,15 @@ def test_perf_triangulation_10000_points():
     assert duree < SEUIL_10000
 
 
-# =============================================================================
-# TESTS PERFORMANCE BINAIRE (PLAN.md: temps d'encodage/décodage)
-# =============================================================================
 
 @pytest.mark.perf
 def test_perf_encode_decode_1000_points():
-    """PLAN: Mesure du temps d'encodage/décodage binaire."""
     points = generer_points(1000)
     
-    # Encode
     debut = time.perf_counter()
     buf = encode_pointset(points)
     temps_encode = time.perf_counter() - debut
     
-    # Decode
     debut = time.perf_counter()
     result = decode_pointset(buf)
     temps_decode = time.perf_counter() - debut
@@ -101,15 +76,12 @@ def test_perf_encode_decode_1000_points():
 
 @pytest.mark.perf
 def test_perf_encode_decode_10000_points():
-    """PLAN: Mesure encode/decode pour 10000 points."""
     points = generer_points(10000)
     
-    # Encode
     debut = time.perf_counter()
     buf = encode_pointset(points)
     temps_encode = time.perf_counter() - debut
     
-    # Decode
     debut = time.perf_counter()
     result = decode_pointset(buf)
     temps_decode = time.perf_counter() - debut

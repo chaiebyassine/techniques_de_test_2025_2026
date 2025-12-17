@@ -13,7 +13,6 @@ from src.binary_utils import (
 
 
 def test_encode_pointset_taille_attendue():
-    """PLAN: Vérifier qu'un encodage produit un binaire de la taille attendue."""
     points = [(1.0, 2.0), (3.0, 4.0)]
     buf = encode_pointset(points)
     
@@ -22,7 +21,6 @@ def test_encode_pointset_taille_attendue():
 
 
 def test_decode_pointset_restitue_coordonnees():
-    """PLAN: Le décodage doit restituer les mêmes coordonnées."""
     buf = struct.pack('<I', 2)           
     buf += struct.pack('<ff', 1.0, 2.0)  
     buf += struct.pack('<ff', 3.0, 4.0) 
@@ -35,7 +33,6 @@ def test_decode_pointset_restitue_coordonnees():
 
 
 def test_pointset_encode_decode_roundtrip():
-    """Test aller-retour: encode puis decode."""
     original = [(1.5, 2.5), (3.5, 4.5), (5.5, 6.5)]
     
     buf = encode_pointset(original)
@@ -46,7 +43,6 @@ def test_pointset_encode_decode_roundtrip():
         assert resultat[i] == pytest.approx(original[i])
 
 def test_encode_triangles_taille():
-    """PLAN: Vérifier la partie sommets + partie triangles."""
     points = [(0.0, 0.0), (1.0, 0.0), (0.0, 1.0)]
     triangles = [(0, 1, 2)]
     
@@ -58,7 +54,6 @@ def test_encode_triangles_taille():
 
 
 def test_decode_triangles_indices_valides():
-    """ Les indices doivent référencer des sommets existants."""
     
     buf = struct.pack('<I', 3)          
     buf += struct.pack('<ff', 0.0, 0.0)
@@ -76,7 +71,6 @@ def test_decode_triangles_indices_valides():
 
 
 def test_triangles_encode_decode_roundtrip():
-    """Test aller-retour pour Triangles."""
     points = [(0.0, 0.0), (1.0, 0.0), (1.0, 1.0), (0.0, 1.0)]
     triangles = [(0, 1, 2), (0, 2, 3)]
     
@@ -89,7 +83,6 @@ def test_triangles_encode_decode_roundtrip():
 
 
 def test_decode_buffer_trop_court():
-    """PLAN: Tampon binaire incomplet ou trop court."""
     buf = b'\x01\x00'  
     
     with pytest.raises(Exception):
@@ -97,7 +90,6 @@ def test_decode_buffer_trop_court():
 
 
 def test_decode_buffer_incomplet():
-    """PLAN: Buffer annonce plus de points qu'il n'en contient."""
     buf = struct.pack('<I', 10)         
     buf += struct.pack('<ff', 1.0, 2.0)  
     
@@ -106,7 +98,6 @@ def test_decode_buffer_incomplet():
 
 
 def test_mauvais_endianness():
-    """PLAN: Mauvais type d'encodage ou endianness incorrecte."""
     buf_big_endian = struct.pack('>I', 1)         
     buf_big_endian += struct.pack('>ff', 1.0, 2.0)
     

@@ -8,7 +8,6 @@ from unittest.mock import patch, MagicMock
 
 
 def creer_pointset_binaire(points):
-    """Crée un PointSet binaire à partir d'une liste de points."""
     buf = struct.pack('<I', len(points))
     for x, y in points:
         buf += struct.pack('<ff', x, y)
@@ -19,7 +18,6 @@ def creer_pointset_binaire(points):
 
 @pytest.fixture
 def client():
-    """Client de test Flask."""
     from src.app import app
     app.config['TESTING'] = True
     with app.test_client() as client:
@@ -70,7 +68,6 @@ def test_flux_complet_carre(client, uuid_valide):
 
 
 def test_triangulator_appelle_pointsetmanager(client, uuid_valide):
-    """PLAN: Le Triangulator envoie bien la requête vers le PointSetManager."""
     points = [(0.0, 0.0), (1.0, 0.0), (0.0, 1.0)]
     pointset_binaire = creer_pointset_binaire(points)
     
@@ -85,7 +82,6 @@ def test_triangulator_appelle_pointsetmanager(client, uuid_valide):
 
 
 def test_pointsetmanager_retourne_404(client, uuid_valide):
-    """PLAN: Il traite correctement l'erreur (PointSet non trouvé)."""
     with patch('src.app.fetch_pointset') as mock:
         mock.side_effect = Exception("PointSet not found")
         
@@ -95,7 +91,6 @@ def test_pointsetmanager_retourne_404(client, uuid_valide):
 
 
 def test_pointsetmanager_indisponible(client, uuid_valide):
-    """PLAN: PointSetManager indisponible → 503."""
     with patch('src.app.fetch_pointset') as mock:
         mock.side_effect = ConnectionError("Service unavailable")
         

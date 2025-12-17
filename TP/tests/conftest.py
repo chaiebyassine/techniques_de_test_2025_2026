@@ -6,7 +6,6 @@ import pytest
 import sys
 import os
 
-# Ajouter le répertoire racine au PYTHONPATH pour les imports
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
 
@@ -23,7 +22,6 @@ def pytest_collection_modifyitems(config, items):
     - Exclut les tests @pytest.mark.perf sauf si explicitement demandés
     """
     if config.getoption("-m"):
-        # Si un marqueur est spécifié, ne pas modifier
         return
     
     skip_perf = pytest.mark.skip(reason="Tests de perf exclus par défaut. Utilisez: pytest -m perf")
